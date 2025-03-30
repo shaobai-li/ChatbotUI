@@ -4,7 +4,8 @@ const chatContainer = document.querySelector(".chat-container");
 
 
 function sendMessage() {
-    const message = userInput.value;
+    const message = userInput.value.trim();
+    if (message === "") return;
     
     const userMessageElement = document.createElement("div");
     userMessageElement.classList.add("message", "user-message");
@@ -18,7 +19,20 @@ function sendMessage() {
     chatContainer.appendChild(botMessageElement);
 
     chatContainer.scrollTop = chatContainer.scrollHeight;
+    updateSendButtonState();
+}
+
+function updateSendButtonState() {
+    const hasText = userInput.value.trim().length > 0;
+    sendButton.disabled = !hasText;
 }
 
 sendButton.addEventListener("click", sendMessage);
+userInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+});
+userInput.addEventListener("input", updateSendButtonState);
+updateSendButtonState();
 
